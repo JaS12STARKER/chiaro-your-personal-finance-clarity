@@ -593,12 +593,7 @@ export type Database = {
     }
     Functions: {
       bootstrap_profile: { Args: never; Returns: string }
-      current_profile_id: { Args: never; Returns: string }
       delete_my_data: { Args: never; Returns: undefined }
-      recalc_account_balance: {
-        Args: { p_account_id: string }
-        Returns: undefined
-      }
     }
     Enums: {
       account_type:
