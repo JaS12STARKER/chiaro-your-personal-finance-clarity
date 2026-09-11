@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useBudget, useCategorie, useConti, useEntrate, useObiettivi, useTransazioni } from "@/lib/db";
+import { useBudget, useCategorie, useConti, useObiettivi, useTransazioni } from "@/lib/db";
 import {
   calcolaTotali,
   coloreBudget,

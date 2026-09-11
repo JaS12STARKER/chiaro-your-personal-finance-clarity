@@ -75,7 +75,7 @@ function Movimenti() {
         amount: tipo === "spesa" ? -Math.abs(valore) : Math.abs(valore),
         date: data,
         description: descrizione || null,
-        user_id: undefined as unknown as string,
+
       },
       {
         onSuccess: () => {
