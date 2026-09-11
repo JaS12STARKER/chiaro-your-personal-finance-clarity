@@ -245,6 +245,7 @@ function Movimenti() {
                 </p>
                 <p className="text-xs text-muted-foreground">
                   {formatDate(t.date)} · {nomeConto(t.account_id)} · {nomeCategoria(t.category_id)}
+                  {t.income_id ? " · da Entrate" : ""}
                 </p>
               </div>
               <span
@@ -254,13 +255,20 @@ function Movimenti() {
               >
                 {formatCurrency(Number(t.amount), t.currency)}
               </span>
-              <button
-                aria-label="Elimina movimento"
-                onClick={() => elimina.mutate(t.id)}
-                className="text-muted-foreground transition-colors hover:text-destructive"
-              >
-                <Trash2 className="size-4" />
-              </button>
+              {t.income_id ? (
+                <span className="text-xs text-muted-foreground" title="Si modifica dalla pagina Entrate">
+                  <Lock className="size-4" aria-hidden />
+                </span>
+              ) : (
+                <button
+                  aria-label="Elimina movimento"
+                  onClick={() => elimina.mutate(t.id)}
+                  className="text-muted-foreground transition-colors hover:text-destructive"
+                >
+                  <Trash2 className="size-4" />
+                </button>
+              )}
+
             </div>
           ))}
           {elenco.length === 0 && (
