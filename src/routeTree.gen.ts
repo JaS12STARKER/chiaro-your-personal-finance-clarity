@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AccediRouteImport } from './routes/accedi'
+import { Route as AuthenticatedContiRouteImport } from './routes/_authenticated/conti'
+import { Route as AuthenticatedEntrateRouteImport } from './routes/_authenticated/entrate'
 import { Route as AuthenticatedMovimentiRouteImport } from './routes/_authenticated/movimenti'
 import { Route as AuthenticatedPannelloRouteImport } from './routes/_authenticated/pannello'
 
@@ -29,6 +31,16 @@ const AccediRoute = AccediRouteImport.update({
   path: '/accedi',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedContiRoute = AuthenticatedContiRouteImport.update({
+  id: '/conti',
+  path: '/conti',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedEntrateRoute = AuthenticatedEntrateRouteImport.update({
+  id: '/entrate',
+  path: '/entrate',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedMovimentiRoute = AuthenticatedMovimentiRouteImport.update({
   id: '/movimenti',
   path: '/movimenti',
@@ -43,12 +55,16 @@ const AuthenticatedPannelloRoute = AuthenticatedPannelloRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/accedi': typeof AccediRoute
+  '/conti': typeof AuthenticatedContiRoute
+  '/entrate': typeof AuthenticatedEntrateRoute
   '/movimenti': typeof AuthenticatedMovimentiRoute
   '/pannello': typeof AuthenticatedPannelloRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/accedi': typeof AccediRoute
+  '/conti': typeof AuthenticatedContiRoute
+  '/entrate': typeof AuthenticatedEntrateRoute
   '/movimenti': typeof AuthenticatedMovimentiRoute
   '/pannello': typeof AuthenticatedPannelloRoute
 }
@@ -57,19 +73,24 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/accedi': typeof AccediRoute
+  '/_authenticated/conti': typeof AuthenticatedContiRoute
+  '/_authenticated/entrate': typeof AuthenticatedEntrateRoute
   '/_authenticated/movimenti': typeof AuthenticatedMovimentiRoute
   '/_authenticated/pannello': typeof AuthenticatedPannelloRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/accedi' | '/movimenti' | '/pannello'
+  fullPaths:
+    '/' | '/accedi' | '/conti' | '/entrate' | '/movimenti' | '/pannello'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/accedi' | '/movimenti' | '/pannello'
+  to: '/' | '/accedi' | '/conti' | '/entrate' | '/movimenti' | '/pannello'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/accedi'
+    | '/_authenticated/conti'
+    | '/_authenticated/entrate'
     | '/_authenticated/movimenti'
     | '/_authenticated/pannello'
   fileRoutesById: FileRoutesById
@@ -103,6 +124,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccediRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/conti': {
+      id: '/_authenticated/conti'
+      path: '/conti'
+      fullPath: '/conti'
+      preLoaderRoute: typeof AuthenticatedContiRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/entrate': {
+      id: '/_authenticated/entrate'
+      path: '/entrate'
+      fullPath: '/entrate'
+      preLoaderRoute: typeof AuthenticatedEntrateRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/movimenti': {
       id: '/_authenticated/movimenti'
       path: '/movimenti'
@@ -121,11 +156,15 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedContiRoute: typeof AuthenticatedContiRoute
+  AuthenticatedEntrateRoute: typeof AuthenticatedEntrateRoute
   AuthenticatedMovimentiRoute: typeof AuthenticatedMovimentiRoute
   AuthenticatedPannelloRoute: typeof AuthenticatedPannelloRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedContiRoute: AuthenticatedContiRoute,
+  AuthenticatedEntrateRoute: AuthenticatedEntrateRoute,
   AuthenticatedMovimentiRoute: AuthenticatedMovimentiRoute,
   AuthenticatedPannelloRoute: AuthenticatedPannelloRoute,
 }
