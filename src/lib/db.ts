@@ -191,3 +191,32 @@ export function useElimina(tabella: Tabella, messaggio: string) {
     onError: (e: Error) => toast.error(`Non è stato possibile eliminare: ${e.message}`),
   });
 }
+
+/** Raccoglie tutti i dati dell'utente per l'esportazione in JSON. */
+export async function raccogliDatiUtente() {
+  const tabelle = [
+    "profiles",
+    "settings",
+    "accounts",
+    "categories",
+    "transactions",
+    "budgets",
+    "income",
+    "savings_goals",
+    "recurring_expenses",
+    "financial_snapshots",
+    "notifications",
+    "ai_insights",
+  ] as const;
+
+  const risultato: Record<string, unknown> = {
+    esportato_il: new Date().toISOString(),
+  };
+
+  for (const t of tabelle) {
+    const { data, error } = await supabase.from(t).select("*");
+    if (error) throw error;
+    risultato[t] = data ?? [];
+  }
+  return risultato;
+}
