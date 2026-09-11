@@ -51,12 +51,11 @@ export type Totali = {
   numeroMovimenti: number;
 };
 
-export function calcolaTotali(
-  transazioni: TxLike[],
-  entrate: IncomeLike[],
-  periodo: Periodo,
-  oggi: string,
-): Totali {
+/**
+ * Le transazioni sono l'unico registro: le entrate sono le transazioni
+ * con importo positivo (comprese quelle generate dalle entrate registrate).
+ */
+export function calcolaTotali(transazioni: TxLike[], periodo: Periodo, oggi: string): Totali {
   let totEntrate = 0;
   let totSpese = 0;
   let n = 0;
@@ -67,10 +66,6 @@ export function calcolaTotali(
     n++;
     if (t.amount >= 0) totEntrate += t.amount;
     else totSpese += -t.amount;
-  }
-  for (const e of entrate) {
-    if (!inPeriodo(e.date, periodo, oggi)) continue;
-    totEntrate += e.amount;
   }
 
   const risparmio = totEntrate - totSpese;
@@ -83,6 +78,7 @@ export function calcolaTotali(
     numeroMovimenti: n,
   };
 }
+
 
 export function spesePerCategoria(
   transazioni: TxLike[],
