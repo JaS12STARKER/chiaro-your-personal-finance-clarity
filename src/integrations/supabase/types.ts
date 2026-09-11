@@ -26,7 +26,7 @@ export type Database = {
           name: string
           sync_status: Database["public"]["Enums"]["sync_status"]
           type: Database["public"]["Enums"]["account_type"]
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string
@@ -39,7 +39,7 @@ export type Database = {
           name: string
           sync_status?: Database["public"]["Enums"]["sync_status"]
           type?: Database["public"]["Enums"]["account_type"]
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string
@@ -52,7 +52,7 @@ export type Database = {
           name?: string
           sync_status?: Database["public"]["Enums"]["sync_status"]
           type?: Database["public"]["Enums"]["account_type"]
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -73,7 +73,7 @@ export type Database = {
           related_entity_id: string | null
           related_entity_type: string | null
           type: Database["public"]["Enums"]["insight_type"]
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           content: string
@@ -83,7 +83,7 @@ export type Database = {
           related_entity_id?: string | null
           related_entity_type?: string | null
           type: Database["public"]["Enums"]["insight_type"]
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           content?: string
@@ -93,7 +93,7 @@ export type Database = {
           related_entity_id?: string | null
           related_entity_type?: string | null
           type?: Database["public"]["Enums"]["insight_type"]
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -113,7 +113,7 @@ export type Database = {
           id: string
           period: Database["public"]["Enums"]["budget_period"]
           start_date: string
-          user_id: string
+          user_id: string | null
           warning_threshold: number
         }
         Insert: {
@@ -123,7 +123,7 @@ export type Database = {
           id?: string
           period?: Database["public"]["Enums"]["budget_period"]
           start_date?: string
-          user_id: string
+          user_id?: string | null
           warning_threshold?: number
         }
         Update: {
@@ -133,7 +133,7 @@ export type Database = {
           id?: string
           period?: Database["public"]["Enums"]["budget_period"]
           start_date?: string
-          user_id?: string
+          user_id?: string | null
           warning_threshold?: number
         }
         Relationships: [
@@ -163,7 +163,7 @@ export type Database = {
           name: string
           parent_category_id: string | null
           sort_order: number
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string
@@ -174,7 +174,7 @@ export type Database = {
           name: string
           parent_category_id?: string | null
           sort_order?: number
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string
@@ -185,7 +185,7 @@ export type Database = {
           name?: string
           parent_category_id?: string | null
           sort_order?: number
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -214,7 +214,7 @@ export type Database = {
           snapshot_date: string
           total_expenses: number
           total_income: number
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string
@@ -225,7 +225,7 @@ export type Database = {
           snapshot_date: string
           total_expenses?: number
           total_income?: number
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string
@@ -236,7 +236,7 @@ export type Database = {
           snapshot_date?: string
           total_expenses?: number
           total_income?: number
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -250,7 +250,7 @@ export type Database = {
       }
       income: {
         Row: {
-          account_id: string | null
+          account_id: string
           amount: number
           created_at: string
           date: string
@@ -258,10 +258,10 @@ export type Database = {
           id: string
           is_recurring: boolean
           source_type: Database["public"]["Enums"]["income_source_type"]
-          user_id: string
+          user_id: string | null
         }
         Insert: {
-          account_id?: string | null
+          account_id: string
           amount: number
           created_at?: string
           date: string
@@ -269,10 +269,10 @@ export type Database = {
           id?: string
           is_recurring?: boolean
           source_type?: Database["public"]["Enums"]["income_source_type"]
-          user_id: string
+          user_id?: string | null
         }
         Update: {
-          account_id?: string | null
+          account_id?: string
           amount?: number
           created_at?: string
           date?: string
@@ -280,7 +280,7 @@ export type Database = {
           id?: string
           is_recurring?: boolean
           source_type?: Database["public"]["Enums"]["income_source_type"]
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -306,7 +306,7 @@ export type Database = {
           is_read: boolean
           message: string
           type: Database["public"]["Enums"]["notification_type"]
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string
@@ -314,7 +314,7 @@ export type Database = {
           is_read?: boolean
           message: string
           type: Database["public"]["Enums"]["notification_type"]
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string
@@ -322,7 +322,7 @@ export type Database = {
           is_read?: boolean
           message?: string
           type?: Database["public"]["Enums"]["notification_type"]
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -372,7 +372,7 @@ export type Database = {
           is_active: boolean
           name: string
           next_due_date: string | null
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           account_id?: string | null
@@ -384,7 +384,7 @@ export type Database = {
           is_active?: boolean
           name: string
           next_due_date?: string | null
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           account_id?: string | null
@@ -396,7 +396,7 @@ export type Database = {
           is_active?: boolean
           name?: string
           next_due_date?: string | null
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -431,7 +431,7 @@ export type Database = {
           name: string
           target_amount: number
           target_date: string | null
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string
@@ -441,7 +441,7 @@ export type Database = {
           name: string
           target_amount: number
           target_date?: string | null
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string
@@ -451,7 +451,7 @@ export type Database = {
           name?: string
           target_amount?: number
           target_date?: string | null
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -512,13 +512,14 @@ export type Database = {
           description: string | null
           external_transaction_id: string | null
           id: string
+          income_id: string | null
           is_recurring: boolean
           notes: string | null
           payment_method: Database["public"]["Enums"]["payment_method"]
           recurring_expense_id: string | null
           source: Database["public"]["Enums"]["tx_source"]
           status: Database["public"]["Enums"]["tx_status"]
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           account_id: string
@@ -530,13 +531,14 @@ export type Database = {
           description?: string | null
           external_transaction_id?: string | null
           id?: string
+          income_id?: string | null
           is_recurring?: boolean
           notes?: string | null
           payment_method?: Database["public"]["Enums"]["payment_method"]
           recurring_expense_id?: string | null
           source?: Database["public"]["Enums"]["tx_source"]
           status?: Database["public"]["Enums"]["tx_status"]
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           account_id?: string
@@ -548,13 +550,14 @@ export type Database = {
           description?: string | null
           external_transaction_id?: string | null
           id?: string
+          income_id?: string | null
           is_recurring?: boolean
           notes?: string | null
           payment_method?: Database["public"]["Enums"]["payment_method"]
           recurring_expense_id?: string | null
           source?: Database["public"]["Enums"]["tx_source"]
           status?: Database["public"]["Enums"]["tx_status"]
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -569,6 +572,13 @@ export type Database = {
             columns: ["category_id"]
             isOneToOne: false
             referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transactions_income_id_fkey"
+            columns: ["income_id"]
+            isOneToOne: false
+            referencedRelation: "income"
             referencedColumns: ["id"]
           },
           {

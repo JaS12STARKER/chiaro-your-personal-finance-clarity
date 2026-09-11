@@ -130,16 +130,25 @@ export function useObiettivi() {
   });
 }
 
-type Tabella = "accounts" | "categories" | "transactions" | "budgets" | "income" | "savings_goals";
+type Tabella =
+  | "accounts"
+  | "categories"
+  | "transactions"
+  | "budgets"
+  | "income"
+  | "savings_goals"
+  | "settings";
 
 const chiaviCorrelate: Record<Tabella, string[]> = {
   accounts: ["conti"],
   categories: ["categorie"],
   transactions: ["transazioni", "conti"],
   budgets: ["budget"],
-  income: ["entrate"],
+  income: ["entrate", "transazioni", "conti"],
   savings_goals: ["obiettivi"],
+  settings: ["impostazioni"],
 };
+
 
 export function useSalva<T extends Tabella>(tabella: T, messaggio: string) {
   const qc = useQueryClient();
@@ -181,4 +190,33 @@ export function useElimina(tabella: Tabella, messaggio: string) {
     },
     onError: (e: Error) => toast.error(`Non è stato possibile eliminare: ${e.message}`),
   });
+}
+
+/** Raccoglie tutti i dati dell'utente per l'esportazione in JSON. */
+export async function raccogliDatiUtente() {
+  const tabelle = [
+    "profiles",
+    "settings",
+    "accounts",
+    "categories",
+    "transactions",
+    "budgets",
+    "income",
+    "savings_goals",
+    "recurring_expenses",
+    "financial_snapshots",
+    "notifications",
+    "ai_insights",
+  ] as const;
+
+  const risultato: Record<string, unknown> = {
+    esportato_il: new Date().toISOString(),
+  };
+
+  for (const t of tabelle) {
+    const { data, error } = await supabase.from(t).select("*");
+    if (error) throw error;
+    risultato[t] = data ?? [];
+  }
+  return risultato;
 }

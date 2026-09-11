@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useBudget, useCategorie, useConti, useEntrate, useObiettivi, useTransazioni } from "@/lib/db";
+import { useBudget, useCategorie, useConti, useObiettivi, useTransazioni } from "@/lib/db";
 import {
   calcolaTotali,
   coloreBudget,
@@ -59,17 +59,15 @@ function Pannello() {
   const mesePrec = periodoMesePrecedente(adesso);
 
   const transazioni = useTransazioni();
-  const entrate = useEntrate();
   const conti = useConti();
   const categorie = useCategorie();
   const budget = useBudget();
   const obiettivi = useObiettivi();
 
   const tx = transazioni.data ?? [];
-  const inc = entrate.data ?? [];
 
-  const totali = calcolaTotali(tx, inc, mese, oggi);
-  const totaliPrec = calcolaTotali(tx, inc, mesePrec, oggi);
+  const totali = calcolaTotali(tx, mese, oggi);
+  const totaliPrec = calcolaTotali(tx, mesePrec, oggi);
   const saldo = saldoTotaleEUR(conti.data ?? []);
 
   const spese = spesePerCategoria(tx, mese, oggi);
@@ -83,12 +81,13 @@ function Pannello() {
   }));
 
   const giorni = giorniDiStorico(
-    [...tx.map((t) => t.date), ...inc.map((e) => e.date)].filter((d) => d <= oggi),
+    tx.map((t) => t.date).filter((d) => d <= oggi),
     oggi,
   );
   const datiSufficienti = giorni >= 30;
 
-  const caricamento = transazioni.isLoading || entrate.isLoading || conti.isLoading;
+  const caricamento = transazioni.isLoading || conti.isLoading;
+
 
   return (
     <div className="space-y-6">
