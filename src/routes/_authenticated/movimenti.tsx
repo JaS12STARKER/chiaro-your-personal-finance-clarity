@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Trash2 } from "lucide-react";
+import { Lock, Trash2 } from "lucide-react";
 import { useCategorie, useConti, useElimina, useSalva, useTransazioni } from "@/lib/db";
 import { formatCurrency, formatDate, todayISO } from "@/lib/format";
 
