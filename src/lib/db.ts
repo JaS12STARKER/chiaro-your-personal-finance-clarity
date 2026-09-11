@@ -130,16 +130,25 @@ export function useObiettivi() {
   });
 }
 
-type Tabella = "accounts" | "categories" | "transactions" | "budgets" | "income" | "savings_goals";
+type Tabella =
+  | "accounts"
+  | "categories"
+  | "transactions"
+  | "budgets"
+  | "income"
+  | "savings_goals"
+  | "settings";
 
 const chiaviCorrelate: Record<Tabella, string[]> = {
   accounts: ["conti"],
   categories: ["categorie"],
   transactions: ["transazioni", "conti"],
   budgets: ["budget"],
-  income: ["entrate"],
+  income: ["entrate", "transazioni", "conti"],
   savings_goals: ["obiettivi"],
+  settings: ["impostazioni"],
 };
+
 
 export function useSalva<T extends Tabella>(tabella: T, messaggio: string) {
   const qc = useQueryClient();
