@@ -1,6 +1,6 @@
-# Chiaro: Your Personal Finance Clarity
+# Flowra: Your Personal Finance Clarity
 
-Crea "Chiaro", un'app di gestione finanziaria personale in italiano (uso singolo utente). Interfaccia interamente in italiano, formato valuta EUR (es. €1.234,56), date in formato italiano (gg/mm/aaaa).
+Crea "Flowra", un'app di gestione finanziaria personale in italiano (uso singolo utente). Interfaccia interamente in italiano, formato valuta EUR (es. €1.234,56), date in formato italiano (gg/mm/aaaa).
 
 QUESTO PRIMO STEP: solo database, autenticazione, CRUD manuale e dashboard base. NON implementare Open Banking, NON implementare assistente AI conversazionale, NON implementare import CSV. Verranno dopo.
 
