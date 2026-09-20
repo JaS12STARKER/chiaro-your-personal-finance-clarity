@@ -18,9 +18,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 export const Route = createFileRoute("/_authenticated/pannello")({
   head: () => ({
     meta: [
-      { title: "Panoramica — Chiaro" },
+      { title: "Panoramica — Flowra" },
       { name: "description", content: "Entrate, spese, risparmio e budget del mese corrente." },
-      { property: "og:title", content: "Panoramica — Chiaro" },
+      { property: "og:title", content: "Panoramica — Flowra" },
       { property: "og:description", content: "Il riepilogo del mese in numeri chiari." },
     ],
   }),

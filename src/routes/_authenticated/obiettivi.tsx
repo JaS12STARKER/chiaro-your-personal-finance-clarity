@@ -11,9 +11,9 @@ import { formatCurrency, formatDate, formatPercent } from "@/lib/format";
 export const Route = createFileRoute("/_authenticated/obiettivi")({
   head: () => ({
     meta: [
-      { title: "Obiettivi — Chiaro" },
+      { title: "Obiettivi — Flowra" },
       { name: "description", content: "Definisci obiettivi di risparmio e segui i progressi." },
-      { property: "og:title", content: "Obiettivi — Chiaro" },
+      { property: "og:title", content: "Obiettivi — Flowra" },
       { property: "og:description", content: "Progresso dei tuoi obiettivi di risparmio." },
     ],
   }),

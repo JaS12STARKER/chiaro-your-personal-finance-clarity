@@ -18,9 +18,9 @@ import { formatCurrency, formatDate, todayISO } from "@/lib/format";
 export const Route = createFileRoute("/_authenticated/movimenti")({
   head: () => ({
     meta: [
-      { title: "Movimenti — Chiaro" },
+      { title: "Movimenti — Flowra" },
       { name: "description", content: "Registra e filtra spese ed entrate dei tuoi conti." },
-      { property: "og:title", content: "Movimenti — Chiaro" },
+      { property: "og:title", content: "Movimenti — Flowra" },
       { property: "og:description", content: "Registra e filtra spese ed entrate." },
     ],
   }),

@@ -20,9 +20,9 @@ import { saldoTotaleEUR } from "@/lib/finance";
 export const Route = createFileRoute("/_authenticated/conti")({
   head: () => ({
     meta: [
-      { title: "Conti — Chiaro" },
+      { title: "Conti — Flowra" },
       { name: "description", content: "Gestisci i tuoi conti e controlla il saldo complessivo." },
-      { property: "og:title", content: "Conti — Chiaro" },
+      { property: "og:title", content: "Conti — Flowra" },
       { property: "og:description", content: "Saldo per conto e totale in euro." },
     ],
   }),

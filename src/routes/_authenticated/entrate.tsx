@@ -19,9 +19,9 @@ import { formatCurrency, formatDate, todayISO } from "@/lib/format";
 export const Route = createFileRoute("/_authenticated/entrate")({
   head: () => ({
     meta: [
-      { title: "Entrate — Chiaro" },
+      { title: "Entrate — Flowra" },
       { name: "description", content: "Registra stipendi, bonus e altre entrate sui tuoi conti." },
-      { property: "og:title", content: "Entrate — Chiaro" },
+      { property: "og:title", content: "Entrate — Flowra" },
       { property: "og:description", content: "Tutte le tue entrate in un unico elenco." },
     ],
   }),

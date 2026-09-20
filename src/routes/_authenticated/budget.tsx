@@ -19,9 +19,9 @@ import { coloreBudget, periodoMese, spesePerCategoria, statoBudget } from "@/lib
 export const Route = createFileRoute("/_authenticated/budget")({
   head: () => ({
     meta: [
-      { title: "Budget — Chiaro" },
+      { title: "Budget — Flowra" },
       { name: "description", content: "Imposta budget per categoria e segui quanto hai speso." },
-      { property: "og:title", content: "Budget — Chiaro" },
+      { property: "og:title", content: "Budget — Flowra" },
       { property: "og:description", content: "Budget e soglie di avviso personalizzabili." },
     ],
   }),
