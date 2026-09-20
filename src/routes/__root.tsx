@@ -13,7 +13,6 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
 
-
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -78,14 +77,24 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Chiaro — Le tue finanze, in ordine" },
+      // viewport-fit=cover serve a far arrivare lo sfondo sotto la tacca e la
+      // barra home dell'iPhone; i contenuti restano al sicuro grazie alle
+      // env(safe-area-inset-*) usate nella barra di navigazione.
+      { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
+      { title: "Flowra — Le tue finanze, in ordine" },
       {
         name: "description",
         content: "Registra entrate e spese, imposta budget e segui i tuoi obiettivi di risparmio.",
       },
-      { name: "theme-color", content: "#0f766e" },
-      { property: "og:title", content: "Chiaro — Le tue finanze, in ordine" },
+      { name: "theme-color", content: "#F98A27" },
+      // iOS non legge "display: standalone" dal manifest sulle versioni
+      // precedenti a Safari 17: senza questi due meta, l'icona aggiunta alla
+      // home aprirebbe comunque la barra di Safari.
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
+      { name: "apple-mobile-web-app-title", content: "Flowra" },
+      { name: "mobile-web-app-capable", content: "yes" },
+      { property: "og:title", content: "Flowra — Le tue finanze, in ordine" },
       {
         property: "og:description",
         content: "Registra entrate e spese, imposta budget e segui i tuoi obiettivi.",
@@ -124,8 +133,28 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+/**
+ * Registra il service worker che rende Flowra installabile.
+ * Si registra solo nel browser e solo su HTTPS (o localhost): sull'anteprima
+ * in HTTP semplice il browser lo rifiuterebbe, e va bene così.
+ */
+function useServiceWorker() {
+  useEffect(() => {
+    if (typeof window === "undefined" || !("serviceWorker" in navigator)) return;
+    if (window.location.protocol !== "https:" && window.location.hostname !== "localhost") return;
+    const id = window.setTimeout(() => {
+      navigator.serviceWorker.register("/sw.js").catch(() => {
+        // Se la registrazione fallisce l'app funziona lo stesso: si perde
+        // solo l'installabilità, non una funzionalità.
+      });
+    }, 1200); // dopo il primo render, per non rubare banda all'avvio
+    return () => window.clearTimeout(id);
+  }, []);
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  useServiceWorker();
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -135,4 +164,3 @@ function RootComponent() {
     </QueryClientProvider>
   );
 }
-

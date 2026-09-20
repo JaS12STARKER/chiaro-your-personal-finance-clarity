@@ -6,18 +6,19 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
+import { LogoFlowra } from "@/components/LogoFlowra";
 
 export const Route = createFileRoute("/accedi")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Accedi a Chiaro — gestione finanze personali" },
+      { title: "Accedi a Flowra — gestione finanze personali" },
       {
         name: "description",
         content:
-          "Accedi al tuo spazio Chiaro per seguire entrate, spese, budget e obiettivi di risparmio in euro.",
+          "Accedi al tuo spazio Flowra per seguire entrate, spese, budget e obiettivi di risparmio in euro.",
       },
-      { property: "og:title", content: "Accedi a Chiaro" },
+      { property: "og:title", content: "Accedi a Flowra" },
       {
         property: "og:description",
         content: "Entra nel tuo spazio personale per tenere in ordine i conti.",
@@ -76,8 +77,9 @@ function Accedi() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4 py-10">
       <div className="w-full max-w-sm">
-        <div className="mb-8 text-center">
-          <h1 className="text-4xl font-semibold tracking-tightest">Chiaro</h1>
+        <div className="mb-8 flex flex-col items-center text-center">
+          <LogoFlowra className="mb-3 size-14" />
+          <h1 className="text-4xl font-semibold tracking-tightest">Flowra</h1>
           <p className="mt-1 text-sm text-muted-foreground">Le tue finanze, in ordine.</p>
         </div>
 
