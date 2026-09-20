@@ -155,13 +155,12 @@ export function useSalva<T extends Tabella>(tabella: T, messaggio: string) {
   return useMutation({
     mutationFn: async (valori: TablesInsert<T> | (TablesUpdate<T> & { id?: string })) => {
       const record = valori as Record<string, unknown>;
-      if (record.id) {
+      if (record["id"]) {
         const { id, ...resto } = record;
-        const { error } = await supabase
-          .from(tabella)
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          .update(resto as any)
-          .eq("id", id as string);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { error } = await (supabase.from(tabella) as any)
+          .update(resto)
+          .eq("id", id);
         if (error) throw error;
       } else {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
