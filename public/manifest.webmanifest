@@ -1,13 +1,13 @@
 {
-  "name": "Chiaro — Le tue finanze, in ordine",
-  "short_name": "Chiaro",
+  "name": "Flowra — Le tue finanze, in ordine",
+  "short_name": "Flowra",
   "description": "Gestione delle finanze personali: entrate, spese, budget e obiettivi.",
   "lang": "it-IT",
   "start_url": "/pannello",
   "scope": "/",
   "display": "standalone",
   "background_color": "#faf8f4",
-  "theme_color": "#0f766e",
+  "theme_color": "#F98A27",
   "icons": [
     { "src": "/icona-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "/icona-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
