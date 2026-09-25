@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { leggiImporto, importoPerModifica } from "@/lib/importo";
+import { AnteprimaImporto } from "@/components/AnteprimaImporto";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -62,14 +64,16 @@ function Budgets() {
   function apriModifica(b: Budget) {
     setModifica(b);
     setCategoriaId(b.category_id ?? GENERALE);
-    setImporto(String(b.amount));
+    setImporto(importoPerModifica(b.amount));
     setPeriodo(b.period as "weekly" | "monthly");
     setSoglia(String(b.warning_threshold));
   }
 
   function invia(e: React.FormEvent) {
     e.preventDefault();
-    const valore = Math.abs(Number(importo.replace(",", ".")));
+    const letto = leggiImporto(importo);
+    if (letto === null) return;
+    const valore = Math.abs(letto);
     if (!valore) return;
     salva.mutate(
       {
@@ -121,6 +125,7 @@ function Budgets() {
                 placeholder="0,00"
                 required
               />
+              <AnteprimaImporto testo={importo} />
             </div>
             <div className="space-y-1.5">
               <Label>Periodo</Label>

@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { leggiImporto, importoPerModifica } from "@/lib/importo";
+import { AnteprimaImporto } from "@/components/AnteprimaImporto";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -66,8 +68,8 @@ function Movimenti() {
 
   function invia(e: React.FormEvent) {
     e.preventDefault();
-    const valore = Number(importo.replace(",", "."));
-    if (!contoSelezionato || !valore) return;
+    const valore = leggiImporto(importo);
+    if (!contoSelezionato || valore === null || valore === 0) return;
     salva.mutate(
       {
         account_id: contoSelezionato,
@@ -123,6 +125,7 @@ function Movimenti() {
                   placeholder="0,00"
                   required
                 />
+                <AnteprimaImporto testo={importo} />
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="data">Data</Label>
