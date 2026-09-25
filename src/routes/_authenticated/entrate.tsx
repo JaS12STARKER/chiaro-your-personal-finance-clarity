@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { leggiImporto, importoPerModifica } from "@/lib/importo";
+import { AnteprimaImporto } from "@/components/AnteprimaImporto";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -71,7 +73,7 @@ function Entrate() {
   function apriModifica(e: Entrata) {
     setModifica(e);
     setFonte(e.source_type as Fonte);
-    setImporto(String(e.amount));
+    setImporto(importoPerModifica(e.amount));
     setData(e.date);
     setContoId(e.account_id ?? "");
     setDescrizione(e.description ?? "");
@@ -80,8 +82,10 @@ function Entrate() {
 
   function invia(ev: React.FormEvent) {
     ev.preventDefault();
-    const valore = Math.abs(Number(importo.replace(",", ".")));
-    if (!contoSelezionato || !valore) return;
+    const letto = leggiImporto(importo);
+    if (!contoSelezionato || letto === null) return;
+    const valore = Math.abs(letto);
+    if (!valore) return;
     salva.mutate(
       {
         ...(modifica ? { id: modifica.id } : {}),
@@ -146,6 +150,7 @@ function Entrate() {
                   placeholder="0,00"
                   required
                 />
+                <AnteprimaImporto testo={importo} />
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="data">Data</Label>

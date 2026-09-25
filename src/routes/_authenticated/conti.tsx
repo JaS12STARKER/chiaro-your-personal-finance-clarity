@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { leggiImporto, importoPerModifica } from "@/lib/importo";
+import { AnteprimaImporto } from "@/components/AnteprimaImporto";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -71,20 +73,22 @@ function Conti() {
     setNome(c.name);
     setTipo(c.type as TipoConto);
     setValuta(c.currency);
-    setSaldoIniziale(String(c.initial_balance));
+    setSaldoIniziale(importoPerModifica(c.initial_balance));
     setIban(c.iban_masked ?? "");
     setAttivo(c.is_active);
   }
 
   function invia(e: React.FormEvent) {
     e.preventDefault();
+    const saldo = saldoIniziale.trim() ? leggiImporto(saldoIniziale) : 0;
+    if (saldo === null) return;
     salva.mutate(
       {
         ...(modifica ? { id: modifica.id } : {}),
         name: nome,
         type: tipo,
         currency: valuta.toUpperCase(),
-        initial_balance: Number(saldoIniziale.replace(",", ".")) || 0,
+        initial_balance: saldo,
         iban_masked: iban || null,
         is_active: attivo,
       },
@@ -151,6 +155,7 @@ function Conti() {
                 value={saldoIniziale}
                 onChange={(e) => setSaldoIniziale(e.target.value)}
               />
+              <AnteprimaImporto testo={saldoIniziale} />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="iban">Ultime cifre IBAN (facoltativo)</Label>

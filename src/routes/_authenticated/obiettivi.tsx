@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { leggiImporto, importoPerModifica } from "@/lib/importo";
+import { AnteprimaImporto } from "@/components/AnteprimaImporto";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -44,23 +46,26 @@ function Obiettivi() {
   function apriModifica(o: Obiettivo) {
     setModifica(o);
     setNome(o.name);
-    setTarget(String(o.target_amount));
-    setAttuale(String(o.current_amount));
+    setTarget(importoPerModifica(o.target_amount));
+    setAttuale(importoPerModifica(o.current_amount));
     setDataObiettivo(o.target_date ?? "");
-    setContributo(o.monthly_contribution != null ? String(o.monthly_contribution) : "");
+    setContributo(importoPerModifica(o.monthly_contribution));
   }
 
   function invia(e: React.FormEvent) {
     e.preventDefault();
-    const num = (v: string) => Number(v.replace(",", "."));
+    const t = leggiImporto(target);
+    const a = attuale.trim() ? leggiImporto(attuale) : 0;
+    const c = contributo.trim() ? leggiImporto(contributo) : null;
+    if (t === null || a === null || (contributo.trim() && c === null)) return;
     salva.mutate(
       {
         ...(modifica ? { id: modifica.id } : {}),
         name: nome,
-        target_amount: Math.abs(num(target)) || 0,
-        current_amount: Math.abs(num(attuale)) || 0,
+        target_amount: Math.abs(t),
+        current_amount: Math.abs(a),
         target_date: dataObiettivo || null,
-        monthly_contribution: contributo ? Math.abs(num(contributo)) : null,
+        monthly_contribution: c !== null ? Math.abs(c) : null,
       },
       { onSuccess: azzera },
     );
@@ -91,6 +96,7 @@ function Obiettivi() {
                 onChange={(e) => setTarget(e.target.value)}
                 required
               />
+              <AnteprimaImporto testo={target} />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="attuale">Capitale attuale (€)</Label>
@@ -100,6 +106,7 @@ function Obiettivi() {
                 value={attuale}
                 onChange={(e) => setAttuale(e.target.value)}
               />
+              <AnteprimaImporto testo={attuale} />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="data">Data obiettivo (facoltativa)</Label>
@@ -118,6 +125,7 @@ function Obiettivi() {
                 value={contributo}
                 onChange={(e) => setContributo(e.target.value)}
               />
+              <AnteprimaImporto testo={contributo} />
             </div>
             <div className="flex gap-2 sm:col-span-2">
               <Button type="submit" disabled={salva.isPending}>
