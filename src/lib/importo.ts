@@ -1,5 +1,3 @@
-import { formatCurrency } from "@/lib/format";
-
 /** Legge un importo scritto in formato italiano. Restituisce null se non valido. */
 export function leggiImporto(testo: string): number | null {
   let s = (testo ?? "").replace(/[\s\u00a0€]/g, "");
@@ -19,7 +17,7 @@ export function leggiImporto(testo: string): number | null {
     const mig = dec === "." ? "," : ".";
     const parti = s.split(dec);
     if (parti.length !== 2) return null;
-    if (!/^\d{1,3}(\\d{3})*$/.test(parti[0]!) && !new RegExp(`^\\d{1,3}(\\${mig}\\d{3})*$`).test(parti[0]!)) return null;
+    if (!new RegExp(`^\\d{1,3}(\\${mig}\\d{3})*$`).test(parti[0]!)) return null;
     intera = parti[0]!.split(mig).join("");
     decimali = parti[1]!;
   } else if (haVirgola) {
@@ -48,14 +46,3 @@ export function importoPerModifica(valore: number | string | null | undefined): 
 }
 
 export const MESSAGGIO_IMPORTO = "Importo non valido, es. 1.234,56";
-
-/** Anteprima / errore sotto un campo importo. */
-export function AnteprimaImporto({ testo, errore }: { testo: string; errore?: boolean }) {
-  if (!testo.trim()) return null;
-  const v = leggiImporto(testo);
-  if (v === null)
-    return errore ? <p className="text-xs text-destructive">{MESSAGGIO_IMPORTO}</p> : (
-      <p className="text-xs text-destructive">{MESSAGGIO_IMPORTO}</p>
-    );
-  return <p className="text-xs text-muted-foreground">= {formatCurrency(v)}</p>;
-}
