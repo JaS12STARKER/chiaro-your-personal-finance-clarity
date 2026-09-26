@@ -15,6 +15,7 @@ import { Route as AccediRouteImport } from './routes/accedi'
 import { Route as AuthenticatedBudgetRouteImport } from './routes/_authenticated/budget'
 import { Route as AuthenticatedCategorieRouteImport } from './routes/_authenticated/categorie'
 import { Route as AuthenticatedContiRouteImport } from './routes/_authenticated/conti'
+import { Route as AuthenticatedControlloRouteImport } from './routes/_authenticated/controllo'
 import { Route as AuthenticatedEntrateRouteImport } from './routes/_authenticated/entrate'
 import { Route as AuthenticatedImpostazioniRouteImport } from './routes/_authenticated/impostazioni'
 import { Route as AuthenticatedMovimentiRouteImport } from './routes/_authenticated/movimenti'
@@ -50,6 +51,11 @@ const AuthenticatedContiRoute = AuthenticatedContiRouteImport.update({
   path: '/conti',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedControlloRoute = AuthenticatedControlloRouteImport.update({
+  id: '/controllo',
+  path: '/controllo',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedEntrateRoute = AuthenticatedEntrateRouteImport.update({
   id: '/entrate',
   path: '/entrate',
@@ -83,6 +89,7 @@ export interface FileRoutesByFullPath {
   '/budget': typeof AuthenticatedBudgetRoute
   '/categorie': typeof AuthenticatedCategorieRoute
   '/conti': typeof AuthenticatedContiRoute
+  '/controllo': typeof AuthenticatedControlloRoute
   '/entrate': typeof AuthenticatedEntrateRoute
   '/impostazioni': typeof AuthenticatedImpostazioniRoute
   '/movimenti': typeof AuthenticatedMovimentiRoute
@@ -95,6 +102,7 @@ export interface FileRoutesByTo {
   '/budget': typeof AuthenticatedBudgetRoute
   '/categorie': typeof AuthenticatedCategorieRoute
   '/conti': typeof AuthenticatedContiRoute
+  '/controllo': typeof AuthenticatedControlloRoute
   '/entrate': typeof AuthenticatedEntrateRoute
   '/impostazioni': typeof AuthenticatedImpostazioniRoute
   '/movimenti': typeof AuthenticatedMovimentiRoute
@@ -109,6 +117,7 @@ export interface FileRoutesById {
   '/_authenticated/budget': typeof AuthenticatedBudgetRoute
   '/_authenticated/categorie': typeof AuthenticatedCategorieRoute
   '/_authenticated/conti': typeof AuthenticatedContiRoute
+  '/_authenticated/controllo': typeof AuthenticatedControlloRoute
   '/_authenticated/entrate': typeof AuthenticatedEntrateRoute
   '/_authenticated/impostazioni': typeof AuthenticatedImpostazioniRoute
   '/_authenticated/movimenti': typeof AuthenticatedMovimentiRoute
@@ -123,6 +132,7 @@ export interface FileRouteTypes {
     | '/budget'
     | '/categorie'
     | '/conti'
+    | '/controllo'
     | '/entrate'
     | '/impostazioni'
     | '/movimenti'
@@ -135,6 +145,7 @@ export interface FileRouteTypes {
     | '/budget'
     | '/categorie'
     | '/conti'
+    | '/controllo'
     | '/entrate'
     | '/impostazioni'
     | '/movimenti'
@@ -148,6 +159,7 @@ export interface FileRouteTypes {
     | '/_authenticated/budget'
     | '/_authenticated/categorie'
     | '/_authenticated/conti'
+    | '/_authenticated/controllo'
     | '/_authenticated/entrate'
     | '/_authenticated/impostazioni'
     | '/_authenticated/movimenti'
@@ -205,6 +217,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedContiRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/controllo': {
+      id: '/_authenticated/controllo'
+      path: '/controllo'
+      fullPath: '/controllo'
+      preLoaderRoute: typeof AuthenticatedControlloRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/entrate': {
       id: '/_authenticated/entrate'
       path: '/entrate'
@@ -247,6 +266,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedBudgetRoute: typeof AuthenticatedBudgetRoute
   AuthenticatedCategorieRoute: typeof AuthenticatedCategorieRoute
   AuthenticatedContiRoute: typeof AuthenticatedContiRoute
+  AuthenticatedControlloRoute: typeof AuthenticatedControlloRoute
   AuthenticatedEntrateRoute: typeof AuthenticatedEntrateRoute
   AuthenticatedImpostazioniRoute: typeof AuthenticatedImpostazioniRoute
   AuthenticatedMovimentiRoute: typeof AuthenticatedMovimentiRoute
@@ -258,6 +278,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedBudgetRoute: AuthenticatedBudgetRoute,
   AuthenticatedCategorieRoute: AuthenticatedCategorieRoute,
   AuthenticatedContiRoute: AuthenticatedContiRoute,
+  AuthenticatedControlloRoute: AuthenticatedControlloRoute,
   AuthenticatedEntrateRoute: AuthenticatedEntrateRoute,
   AuthenticatedImpostazioniRoute: AuthenticatedImpostazioniRoute,
   AuthenticatedMovimentiRoute: AuthenticatedMovimentiRoute,
