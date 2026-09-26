@@ -25,6 +25,7 @@ const voci = [
   { to: "/budget", label: "Budget", icon: PiggyBank },
   { to: "/obiettivi", label: "Obiettivi", icon: Target },
   { to: "/categorie", label: "Categorie", icon: Tags },
+  { to: "/controllo", label: "Controllo saldi", icon: Sparkles },
   { to: "/impostazioni", label: "Impostazioni", icon: SettingsIcon },
 ] as const;
 
