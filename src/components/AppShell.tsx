@@ -12,6 +12,7 @@ import {
   TrendingUp,
   Plus,
   LogOut,
+  Sparkles,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { LogoFlowra } from "@/components/LogoFlowra";

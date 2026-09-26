@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { leggiImporto, importoPerModifica } from "@/lib/importo";
 import { AnteprimaImporto } from "@/components/AnteprimaImporto";
@@ -13,8 +13,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Lock, Trash2 } from "lucide-react";
-import { useCategorie, useConti, useElimina, useSalva, useTransazioni } from "@/lib/db";
+import { Lock, Pencil, Trash2, X } from "lucide-react";
+import {
+  useCategorie,
+  useConti,
+  useElimina,
+  useSalva,
+  useTransazioni,
+  type Transazione,
+} from "@/lib/db";
 import { formatCurrency, formatDate, todayISO } from "@/lib/format";
 
 export const Route = createFileRoute("/_authenticated/movimenti")({
@@ -35,9 +42,11 @@ function Movimenti() {
   const conti = useConti();
   const categorie = useCategorie();
   const transazioni = useTransazioni();
-  const salva = useSalva("transactions", "Movimento registrato.");
+  const salva = useSalva("transactions", "Movimento salvato.");
   const elimina = useElimina("transactions", "Movimento eliminato.");
+  const formRef = useRef<HTMLDivElement>(null);
 
+  const [modifica, setModifica] = useState<Transazione | null>(null);
   const [tipo, setTipo] = useState<"spesa" | "entrata">("spesa");
   const [importo, setImporto] = useState("");
   const [data, setData] = useState(todayISO());
@@ -66,25 +75,54 @@ function Movimenti() {
   const nomeCategoria = (id: string | null) =>
     id ? (categorie.data?.find((c) => c.id === id)?.name ?? "—") : "Senza categoria";
 
+  function azzera() {
+    setModifica(null);
+    setTipo("spesa");
+    setImporto("");
+    setData(todayISO());
+    setDescrizione("");
+    setContoId("");
+    setCategoriaId(TUTTI);
+  }
+
+  function apriModifica(t: Transazione) {
+    setModifica(t);
+    setTipo(Number(t.amount) < 0 ? "spesa" : "entrata");
+    setImporto(importoPerModifica(Math.abs(Number(t.amount))));
+    setData(t.date.slice(0, 10));
+    setContoId(t.account_id);
+    setCategoriaId(t.category_id ?? TUTTI);
+    setDescrizione(t.description ?? "");
+    formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function chiediElimina(t: Transazione) {
+    const nome = t.description || nomeCategoria(t.category_id);
+    const ok = window.confirm(
+      `Eliminare il movimento «${nome}» di ${formatCurrency(Number(t.amount), t.currency)} del ${formatDate(t.date)}? L'operazione non è annullabile.`,
+    );
+    if (!ok) return;
+    elimina.mutate(t.id, {
+      onSuccess: () => {
+        if (modifica?.id === t.id) azzera();
+      },
+    });
+  }
+
   function invia(e: React.FormEvent) {
     e.preventDefault();
     const valore = leggiImporto(importo);
     if (!contoSelezionato || valore === null || valore === 0) return;
     salva.mutate(
       {
+        ...(modifica ? { id: modifica.id } : {}),
         account_id: contoSelezionato,
         category_id: categoriaId === TUTTI ? null : categoriaId,
         amount: tipo === "spesa" ? -Math.abs(valore) : Math.abs(valore),
         date: data,
         description: descrizione || null,
-
       },
-      {
-        onSuccess: () => {
-          setImporto("");
-          setDescrizione("");
-        },
-      },
+      { onSuccess: azzera },
     );
   }
 
@@ -92,9 +130,11 @@ function Movimenti() {
     <div className="space-y-6">
       <h1 className="text-2xl font-semibold tracking-tightest">Movimenti</h1>
 
-      <Card>
+      <Card ref={formRef} className="scroll-mt-20">
         <CardHeader>
-          <CardTitle className="text-base">Aggiungi rapidamente</CardTitle>
+          <CardTitle className="text-base">
+            {modifica ? "Modifica movimento" : "Aggiungi rapidamente"}
+          </CardTitle>
         </CardHeader>
         <CardContent>
           {(conti.data ?? []).length === 0 ? (
@@ -177,10 +217,15 @@ function Movimenti() {
                   placeholder="Facoltativa"
                 />
               </div>
-              <div className="sm:col-span-2">
-                <Button type="submit" className="w-full sm:w-auto" disabled={salva.isPending}>
-                  Registra movimento
+              <div className="flex gap-2 sm:col-span-2">
+                <Button type="submit" className="flex-1 sm:flex-none" disabled={salva.isPending}>
+                  {modifica ? "Salva modifiche" : "Registra movimento"}
                 </Button>
+                {modifica && (
+                  <Button type="button" variant="ghost" onClick={azzera}>
+                    <X className="size-4" aria-hidden /> Annulla
+                  </Button>
+                )}
               </div>
             </form>
           )}
@@ -259,17 +304,26 @@ function Movimenti() {
                 {formatCurrency(Number(t.amount), t.currency)}
               </span>
               {t.income_id ? (
-                <span className="text-xs text-muted-foreground" title="Si modifica dalla pagina Entrate">
+                <span className="p-2 text-xs text-muted-foreground" title="Si modifica dalla pagina Entrate">
                   <Lock className="size-4" aria-hidden />
                 </span>
               ) : (
-                <button
-                  aria-label="Elimina movimento"
-                  onClick={() => elimina.mutate(t.id)}
-                  className="text-muted-foreground transition-colors hover:text-destructive"
-                >
-                  <Trash2 className="size-4" />
-                </button>
+                <>
+                  <button
+                    aria-label="Modifica movimento"
+                    onClick={() => apriModifica(t)}
+                    className="-m-1 p-2 text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    <Pencil className="size-4" />
+                  </button>
+                  <button
+                    aria-label="Elimina movimento"
+                    onClick={() => chiediElimina(t)}
+                    className="-m-1 p-2 text-muted-foreground transition-colors hover:text-destructive"
+                  >
+                    <Trash2 className="size-4" />
+                  </button>
+                </>
               )}
 
             </div>
