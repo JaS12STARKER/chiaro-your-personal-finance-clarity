@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import {
@@ -13,9 +13,12 @@ import {
   Plus,
   LogOut,
   Sparkles,
+  MoreHorizontal,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { LogoFlowra } from "@/components/LogoFlowra";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 
 const voci = [
@@ -31,11 +34,13 @@ const voci = [
 ] as const;
 
 const vociMobile = voci.slice(0, 4);
+const vociAltro = voci.slice(4);
 
 export function AppShell({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const [altroAperto, setAltroAperto] = useState(false);
 
   async function esci() {
     await queryClient.cancelQueries();
@@ -111,7 +116,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       <nav
         style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
-        className="fixed inset-x-0 bottom-0 z-20 grid grid-cols-4 border-t border-border bg-background/95 backdrop-blur md:hidden"
+        className="fixed inset-x-0 bottom-0 z-20 grid grid-cols-5 border-t border-border bg-background/95 backdrop-blur md:hidden"
       >
         {vociMobile.map(({ to, label, icon: Icon }) => (
           <Link
@@ -126,6 +131,59 @@ export function AppShell({ children }: { children: ReactNode }) {
             {label}
           </Link>
         ))}
+        <Sheet open={altroAperto} onOpenChange={setAltroAperto}>
+          <SheetTrigger asChild>
+            <Button
+              type="button"
+              variant="ghost"
+              aria-label="Altro"
+              aria-current={vociAltro.some(({ to }) => pathname === to) ? "page" : undefined}
+              className={cn(
+                "h-auto min-h-12 flex flex-col items-center gap-1 rounded-none py-2 text-[11px] font-normal text-muted-foreground",
+                vociAltro.some(({ to }) => pathname === to) && "text-primary",
+              )}
+            >
+              <MoreHorizontal className="size-5!" aria-hidden />
+              Altro
+            </Button>
+          </SheetTrigger>
+          <SheetContent
+            side="bottom"
+            style={{ paddingBottom: "calc(1.5rem + env(safe-area-inset-bottom, 0px))" }}
+            className="max-h-[85dvh] overflow-y-auto md:hidden"
+          >
+            <SheetHeader className="text-left">
+              <SheetTitle>Altro</SheetTitle>
+            </SheetHeader>
+            <nav className="flex flex-col">
+              {vociAltro.map(({ to, label, icon: Icon }) => (
+                <Link
+                  key={to}
+                  to={to}
+                  onClick={() => setAltroAperto(false)}
+                  className={cn(
+                    "flex min-h-12 items-center gap-3 px-2 text-sm font-medium text-foreground",
+                    pathname === to && "text-primary",
+                  )}
+                >
+                  <Icon className="size-5 shrink-0" aria-hidden />
+                  {label}
+                </Link>
+              ))}
+            </nav>
+            <div className="border-t border-border pt-2">
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => { setAltroAperto(false); void esci(); }}
+                className="min-h-12 w-full justify-start gap-3 px-2 text-sm font-medium text-muted-foreground"
+              >
+                <LogOut className="size-5!" aria-hidden />
+                Esci
+              </Button>
+            </div>
+          </SheetContent>
+        </Sheet>
       </nav>
     </div>
   );
